@@ -1,6 +1,9 @@
+# Ray casting exercise
+
 import pyglet
 import math
 from pyglet import shapes
+import utils
 
 screenHeight = 1024
 screenWidth = 2048
@@ -16,14 +19,21 @@ class ray:
         # Coordinate for the source of the ray
         self.xSrc = x
         self.ySrc = y
-        # Angle at which ray propagates, 0 deg is straight down, -90 deg is straight to the left, 90 deg is straight to the right. 
+        color = (255,255,160)
+        # Angle at which ray propagates, 0 deg is to the right, 90 deg is up 
         self.angle = angle
-        self.xEnd = self.xSrc+math.cos(self.angle)*1000
-        self.yEnd = self.ySrc+math.sin(self.angle)*1000
-        self.shape = shapes.Line(self.xSrc, self.ySrc, self.xEnd, self.yEnd, thickness=2, color=(255,255,160), batch=graphicsBatch)
+        self.xEnd, self.yEnd = utils.findEdges(self.xSrc,self.ySrc,self.angle, screenWidth, screenHeight)
+        # Check if rays end outside of the screen, if ray outside screen; ray is red.
+        if self.xEnd > screenWidth or self.xEnd < 0 or self.yEnd > screenHeight or self.yEnd < 0:
+            color = (255,0,0)
+        self.shape = shapes.Line(self.xSrc, self.ySrc, self.xEnd, self.yEnd, thickness=2, color=color, batch=graphicsBatch)
 
 
-    def update(self):
+    def update(self,x,y,angle):
+        self.xSrc = x
+        self.ySrc = y
+        self.angle = angle
+        self.xEnd, self.yEnd = utils.findEdges(self.xSrc,self.ySrc,angle, screenWidth, screenHeight)
         pass
 
 
@@ -37,10 +47,11 @@ class lamp:
         self.shape = shapes.Circle(self.x, self.y, self.r, color=(255,255,143), batch=graphicsBatch)
 
     def update(self):
+        # For future if I want the lamps to be movable, maybe attached to a string in the ceiling?
         pass
 
-l1 = lamp(500,950,100,lampRad)
-l2 = lamp(1800,950,50,lampRad)
+l1 = lamp(500,950,500,lampRad)
+l2 = lamp(1800,950,300,lampRad)
 lamps = [l1, l2]
 
 for l in lamps:
