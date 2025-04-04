@@ -36,15 +36,15 @@ class ray:
         # Check if rays end outside of the screen, if ray outside screen; ray is red.
         if self.xEnd > config.screenWidth or self.xEnd < 0 or self.yEnd > config.screenHeight or self.yEnd < 0:
             color = (255,0,0)
-        self.shape = shapes.Line(self.xSrc, self.ySrc, self.xEnd, self.yEnd, thickness=2, color=color, batch=graphicsBatch)
+        self.shape = shapes.Line(self.xSrc, self.ySrc, self.xEnd, self.yEnd, thickness=2, color=config.rayColor, batch=graphicsBatch)
 
 
-    def update(self,x,y,angle):
+    def update(self,x,y,angle,objects):
         self.xSrc = x
         self.ySrc = y
         self.angle = angle
-        self.xEnd, self.yEnd = utils.findCircle(self.xSrc,self.ySrc,self.angle,circle)
-        self.xEnd, self.yEnd = utils.findEdges(self.xSrc,self.ySrc,angle, config.screenWidth, config.screenHeight)
+        self.xEnd, self.yEnd = utils.findIntersection(self,objects,config.screenWidth,config.screenHeight)
+        self.shape = shapes.Line(self.xSrc,self.ySrc,self.xEnd,self.yEnd, thickness=2, color=config.rayColor, batch=graphicsBatch)
         pass
 
 

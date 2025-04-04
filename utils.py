@@ -139,11 +139,6 @@ def findRectangle(ray,rectangle):
 
     return
 
-    
-
-
-
-
         
 def findIntersection(ray,objects,screenWidth,screenHeight):
 
@@ -160,6 +155,7 @@ def findIntersection(ray,objects,screenWidth,screenHeight):
         if result:
             t_list.append(result)
 
+    # Edge of the screen
     result = findEdges(ray, screenWidth, screenHeight)
     if result:
         t_list.append(result)

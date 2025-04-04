@@ -4,6 +4,7 @@ import pyglet
 import math
 import objects
 import config
+import mouse
 
 window = pyglet.window.Window(config.screenWidth,config.screenHeight,'Ray Casting Simulator')
 
@@ -28,13 +29,17 @@ for l in lamps:
         l.rayList[i] = objects.ray(l.x, l.y,i*2*math.pi/l.intensity,allObjects)
 
 def update(dt):
-    pass
+    for l in lamps:
+        for i in l.rayList:
+            objects.ray.update(i,i.xSrc,i.ySrc,i.angle,allObjects)
 
 
 @window.event
 def on_draw():
     window.clear()
     objects.graphicsBatch.draw()
+
+mouse.mouseControl(window,allObjects)
         
 # 60 fps
 pyglet.clock.schedule_interval(update, 1/config.fps)
