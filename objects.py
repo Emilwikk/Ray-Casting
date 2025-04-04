@@ -21,14 +21,18 @@ class lamp:
 
 
 class ray:
-    def __init__(self,x,y,angle):
+    def __init__(self,x,y,angle,objects):
         # Coordinate for the source of the ray
         self.xSrc = x
         self.ySrc = y
         color = (255,255,160)
         # Angle at which ray propagates, 0 deg is to the right, 90 deg is up 
         self.angle = angle
-        self.xEnd, self.yEnd = utils.findEdges(self.xSrc,self.ySrc,self.angle, config.screenWidth, config.screenHeight)
+
+        #self.xEnd, self.yEnd = utils.findCircle(self.xSrc,self.ySrc,self.angle,circle)
+        #self.xEnd, self.yEnd = utils.findEdges(self.xSrc,self.ySrc,self.angle, config.screenWidth, config.screenHeight)
+        self.xEnd, self.yEnd = utils.findIntersection(self,objects,config.screenWidth,config.screenHeight)
+
         # Check if rays end outside of the screen, if ray outside screen; ray is red.
         if self.xEnd > config.screenWidth or self.xEnd < 0 or self.yEnd > config.screenHeight or self.yEnd < 0:
             color = (255,0,0)
@@ -39,6 +43,7 @@ class ray:
         self.xSrc = x
         self.ySrc = y
         self.angle = angle
+        self.xEnd, self.yEnd = utils.findCircle(self.xSrc,self.ySrc,self.angle,circle)
         self.xEnd, self.yEnd = utils.findEdges(self.xSrc,self.ySrc,angle, config.screenWidth, config.screenHeight)
         pass
 
@@ -59,14 +64,14 @@ class circle:
 
 
 class rectangle:
-    def __init__(self,xCenter,yCenter,width,height,color,moveable):
-        self.xCen = xCenter
-        self.yCen = yCenter
+    def __init__(self,x,y,width,height,color,moveable):
+        self.x = x
+        self.y = y
         self.width = width
         self.height = height
         self.color = color
         self.moveable = moveable
-        self.shape = shapes.Rectangle(self.xCen,self.yCen,width,height,color=color,batch=graphicsBatch)
+        self.shape = shapes.Rectangle(self.x,self.y,width,height,color=color,batch=graphicsBatch)
 
     def update(self,dt):
         if self.moveable:
